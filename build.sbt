@@ -5,7 +5,7 @@ lazy val fp1 = (project in file(".")).
     name := "succinctscala",
     organization := "org.example",
     version := "0.1-SNAPSHOT",
-    scalaVersion := "2.12.0"
+    scalaVersion := "2.13.0"
   )
 
 // addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
@@ -68,7 +68,7 @@ val MonixVersion = "3.2.2"
 val ZIOVersion = "1.0.0-RC21-2"
 val ShapelessVersion = "2.3.3"
 val FS2Version = "2.4.2"
-val AmmoniteVersion = "0.9.3"
+val AmmoniteVersion = "2.2.0"
 
 libraryDependencies ++= Seq(
 //   "com.typesafe" % "config" % "1.3.1",
@@ -96,7 +96,7 @@ libraryDependencies ++= Seq(
 )
 
 
-libraryDependencies += "org.scodec" %% "scodec-bits" % "1.1.6"
+libraryDependencies += "org.scodec" %% "scodec-bits" % "1.1.17"
 
 // Embed Li Haoyi's Ammonite repl in your test project
 // libraryDependencies += "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full
