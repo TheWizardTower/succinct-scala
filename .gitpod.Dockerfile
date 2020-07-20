@@ -6,4 +6,4 @@ FROM gitpod/workspace-full
 #
 # More information: https://www.gitpod.io/docs/config-docker/
 
-brew install ammonite-repl sbt scala
+RUN brew install ammonite-repl sbt scala
