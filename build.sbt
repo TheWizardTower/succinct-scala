@@ -71,40 +71,16 @@ val FS2Version = "2.4.2"
 val AmmoniteVersion = "2.2.0"
 
 libraryDependencies ++= Seq(
-//   "com.typesafe" % "config" % "1.3.1",
 //   // -- testing --
 //   "org.scalactic" %% "scalactic" % "3.2.0",
   "org.scalatest" %% "scalatest" % "3.2.0" % "test",
-//   // Cats
-//   "org.typelevel" %% "cats-core" % CatsVersion,
-//   "org.typelevel" %% "cats-effect" % CatsEffectVersion,
-//   // fs2
-//   "co.fs2" %% "fs2-core" % FS2Version,
-//   // Monix
-//   "io.monix" %% "monix" % MonixVersion,
-//   // Shapeless
-//   "com.chuusai" %% "shapeless" % ShapelessVersion,
-//   // Zio
-//   "dev.zio" %% "zio" % ZIOVersion,
-//   "dev.zio" %% "zio-test" % ZIOVersion % "test",
-//   "dev.zio" %% "zio-test-sbt" % ZIOVersion % "test",
-//   "dev.zio" %% "zio-streams" % ZIOVersion,
-//   // type class derivation
-//   "org.typelevel" %% "simulacrum" % "1.0.0",
   // Embed Li Haoyi's Ammonite repl in your test project
-  "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full
+  "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full,
+  "org.scodec" %% "scodec-bits" % "1.1.17"
 )
 
-
-libraryDependencies += "org.scodec" %% "scodec-bits" % "1.1.17"
-
-// Embed Li Haoyi's Ammonite repl in your test project
-// libraryDependencies += "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full
-
-testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
-
 resolvers ++= Seq(
-  "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/",
+//   "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/",
   "Secured Central Repository" at "https://repo1.maven.org/maven2",
   Resolver.sonatypeRepo("snapshots")
 )
