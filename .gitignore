@@ -20,3 +20,10 @@ project/plugins/project/
 
 .DS_Store
 
+metals.h2.db
+metals.lock.db
+metals.sbt
+*.semanticdb
+fp1-test.json
+fp1.json
+bloop.settings.json
