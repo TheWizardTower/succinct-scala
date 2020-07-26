@@ -25,6 +25,9 @@ class RankTest extends AnyFlatSpec {
 
   "populateCache" should "Count correctly." in {
     assert(
+      Rank.populateCache(bin"", 4) == Vector()
+    )
+    assert(
       Rank.populateCache(hex"00000000".toBitVector, 4) == Vector(
         RankCache(0, Vector(0, 0, 0, 0))
       )
@@ -59,6 +62,16 @@ class RankTest extends AnyFlatSpec {
     assert(
       Rank.populateCache(hex"00FF".toBitVector, 4) == Vector(
         RankCache(0, Vector(0, 8))
+      )
+    )
+    assert(
+      Rank.populateCache(hex"00".toBitVector, 4) == Vector(
+        RankCache(0, Vector(0))
+      )
+    )
+    assert(
+      Rank.populateCache(hex"FF".toBitVector, 4) == Vector(
+        RankCache(0, Vector(8))
       )
     )
   }
