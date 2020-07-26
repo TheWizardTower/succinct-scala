@@ -82,7 +82,7 @@ object Rank {
             result = result :+ temp
             runningBitCount += stepTotal
         }
-        
+
         printf("Done.\n\n")
         return result
     }
