@@ -75,8 +75,8 @@ object Rank {
                     } else {
                         byteCount = countOnesInByte(bits.getByte(arrayIndex))
                     }
-                        stepTotal += byteCount
-                    temp.countAtByte = temp.countAtByte :+ byteCount
+                    stepTotal += byteCount
+                    temp.countAtByte = temp.countAtByte :+ stepTotal
                 }
             }
             result = result :+ temp
