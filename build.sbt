@@ -5,7 +5,7 @@ lazy val fp1 = (project in file(".")).
     name := "succinctscala",
     organization := "org.example",
     version := "0.1-SNAPSHOT",
-    scalaVersion := "2.12.0"
+    scalaVersion := "2.13.0"
   )
 
 // addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
@@ -68,43 +68,19 @@ val MonixVersion = "3.2.2"
 val ZIOVersion = "1.0.0-RC21-2"
 val ShapelessVersion = "2.3.3"
 val FS2Version = "2.4.2"
-val AmmoniteVersion = "0.9.3"
+val AmmoniteVersion = "2.2.0"
 
 libraryDependencies ++= Seq(
-//   "com.typesafe" % "config" % "1.3.1",
 //   // -- testing --
 //   "org.scalactic" %% "scalactic" % "3.2.0",
   "org.scalatest" %% "scalatest" % "3.2.0" % "test",
-//   // Cats
-//   "org.typelevel" %% "cats-core" % CatsVersion,
-//   "org.typelevel" %% "cats-effect" % CatsEffectVersion,
-//   // fs2
-//   "co.fs2" %% "fs2-core" % FS2Version,
-//   // Monix
-//   "io.monix" %% "monix" % MonixVersion,
-//   // Shapeless
-//   "com.chuusai" %% "shapeless" % ShapelessVersion,
-//   // Zio
-//   "dev.zio" %% "zio" % ZIOVersion,
-//   "dev.zio" %% "zio-test" % ZIOVersion % "test",
-//   "dev.zio" %% "zio-test-sbt" % ZIOVersion % "test",
-//   "dev.zio" %% "zio-streams" % ZIOVersion,
-//   // type class derivation
-//   "org.typelevel" %% "simulacrum" % "1.0.0",
   // Embed Li Haoyi's Ammonite repl in your test project
-  "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full
+  "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full,
+  "org.scodec" %% "scodec-bits" % "1.1.17"
 )
 
-
-libraryDependencies += "org.scodec" %% "scodec-bits" % "1.1.6"
-
-// Embed Li Haoyi's Ammonite repl in your test project
-// libraryDependencies += "com.lihaoyi" %% "ammonite" % AmmoniteVersion % "test" cross CrossVersion.full
-
-testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
-
 resolvers ++= Seq(
-  "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/",
+//   "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/",
   "Secured Central Repository" at "https://repo1.maven.org/maven2",
   Resolver.sonatypeRepo("snapshots")
 )
