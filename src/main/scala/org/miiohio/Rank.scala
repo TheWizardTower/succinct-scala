@@ -27,6 +27,22 @@ object Rank {
         }
         return result
     }
+    def loopHelper(bits: BitVector, index: Int, stepSize: Int): Int = {
+        val bitsCount = bits.length
+        val bytesCounted = bitsCount / 8
+        val bitsToGo: Int = (bitsCount % 8).toInt
+        var byteCount = 0
+        printf("    Found bit fragments. Bytes counted: %d, bitsToGo: %d\n", bytesCounted, bitsToGo)
+        for (bitFragment <- 0 until bitsToGo) {
+            printf("      bitFragment: %d\n", bitFragment)
+            val bitIndex = (index * stepSize * 8) + bitFragment
+            val bitIsHigh = bits.get(bitIndex.toLong)
+            if (bitIsHigh) {
+                byteCount += 1
+            }
+        }
+        return byteCount
+    }
     def populateCache(bits: BitVector, stepSize: Int): Vector[RankCache] = {
         val bitsCount = bits.length
         val stepCount = java.lang.Math.ceil(bitsCount.toDouble / (8.0 * stepSize.toDouble)).toInt
@@ -40,19 +56,9 @@ object Rank {
             val bytesLeft = ((bitsCount / 8.0) - (index * stepSize)).toInt
             val iteratorBoundary = java.lang.Math.min(stepSize, bytesLeft).toInt
             printf("BytesLeft: %d, iteratorBoundary: %d\n", bytesLeft, iteratorBoundary)
+            var byteCount = 0
             if (iteratorBoundary == 0) {
-                val bytesCounted = bitsCount / 8
-                val bitsToGo: Int = (bitsCount % 8).toInt
-                var byteCount = 0
-                printf("    Found bit fragments. Bytes counted: %d, bitsToGo: %d\n", bytesCounted, bitsToGo)
-                for (bitFragment <- 0 until bitsToGo) {
-                    printf("      bitFragment: %d\n", bitFragment)
-                    val bitIndex = (index * stepSize * 8) + bitFragment
-                    val bitIsHigh = bits.get(bitIndex)
-                    if (bitIsHigh) {
-                        byteCount += 1
-                    }
-                }
+                byteCount = loopHelper(bits, index, stepSize)
                 stepTotal += byteCount
                 temp.countAtByte = temp.countAtByte :+ byteCount
             } else {
@@ -61,17 +67,7 @@ object Rank {
                     val arrayIndex: Long = ((index * stepSize) + byteIndex).toLong
                     var byteCount = 0
                     if (((arrayIndex + 1) * 8) > bitsCount) {
-                        val bytesCounted = bitsCount / 8
-                        val bitsToGo: Int = (bitsCount % 8).toInt
-                        printf("    Found bit fragments. Bytes counted: %d, bitsToGo: %d\n", bytesCounted, bitsToGo)
-                        for (bitFragment <- 0 until bitsToGo) {
-                            printf("      bitFragment: %d\n", bitFragment)
-                            val bitIndex = (arrayIndex * 8) + bitFragment
-                                val bitIsHigh = bits.get(bitIndex)
-                            if (bitIsHigh) {
-                                byteCount += 1
-                            }
-                        }
+                        byteCount = loopHelper(bits, index, stepSize)
                     } else {
                         byteCount = countOnesInByte(bits.getByte(arrayIndex))
                     }

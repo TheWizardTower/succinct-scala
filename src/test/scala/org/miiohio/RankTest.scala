@@ -33,6 +33,8 @@ class RankTest extends AnyFlatSpec {
 
   "populateCache" should "Handle not-byte-aligned arrays." in {
       assert(Rank.populateCache(bin"00", 4) == Vector(RankCache(0, Vector(0))))
+      assert(Rank.populateCache(bin"11", 4) == Vector(RankCache(0, Vector(2))))
+      assert(Rank.populateCache(BitVector.concat(Vector[BitVector](hex"0000".toBitVector, (bin"11"))), 4) == Vector(RankCache(0, Vector(0,0,2))))
   }
 
 }
