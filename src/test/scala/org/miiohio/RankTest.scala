@@ -28,12 +28,12 @@ class RankTest extends AnyFlatSpec {
       Rank.populateCache(bin"", 4) == Vector()
     )
     assert(
-      Rank.populateCache(hex"00000000".toBitVector, 4) == Vector(
+      Rank.populateCache(hex"00 00 00 00".toBitVector, 4) == Vector(
         RankCache(0, Vector(0, 0, 0, 0))
       )
     )
     assert(
-      Rank.populateCache(hex"0000000000000000".toBitVector, 4) == Vector(
+      Rank.populateCache(hex"00 00 00 00 00 00 00 00".toBitVector, 4) == Vector(
         RankCache(0, Vector(0, 0, 0, 0)),
         RankCache(0, Vector(0, 0, 0, 0))
       )
