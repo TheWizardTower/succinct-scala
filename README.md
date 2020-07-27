@@ -2,7 +2,6 @@
 
 # Succinct-scala
 
-This will be a port into scala of [miiohio/succinct](https://github.com/miiohio/succinct). As of now, this is in progress and very much in flux.
-
-
-
+This will be a port into scala of
+[miiohio/succinct](https://github.com/miiohio/succinct). As of now, this is in
+progress and very much in flux.
