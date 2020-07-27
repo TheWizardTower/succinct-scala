@@ -85,7 +85,8 @@ class RankTest extends AnyFlatSpec {
           Vector[BitVector](hex"00 00 00 00".toBitVector, (bin"11"))
         ),
         4
-      ) == Vector(RankCache(0, Vector(0, 0, 0, 0, 2)))
+      ) == Vector(RankCache(0, Vector(0, 0, 0, 0)), RankCache(0, Vector(2)))
+    )
     assert(
       Rank.populateCache(
         BitVector.concat(
