@@ -53,17 +53,14 @@ object Rank {
     }
     return byteCount
   }
-  def populateCache(bits: BitVector, stepSize: Int): Vector[RankCache] = {
-    if (bits.length == 0) {
-      return Vector[RankCache]()
-    }
-    printf("BitVector: %s\n", bits.toHex)
-    val bitsCount = bits.length
-    val stepCount = (bitsCount / (8 * stepSize)).toInt
+  def countBlocks(
+      bits: BitVector,
+      stepCount: Int,
+      stepSize: Int
+  ): Vector[RankCache] = {
     var result: Vector[RankCache] = Vector()
+    val bitsCount = bits.length
     var runningBitCount: Int = 0
-    printf("bit length: %d, calculated step count: %d\n", bitsCount, stepCount)
-
     for (index <- 0 until stepCount) {
       printf("Index: %d\n", index)
       var stepTotal: Int = 0
@@ -94,48 +91,90 @@ object Rank {
       result :+= temp
       runningBitCount += stepTotal
     }
-    // Check if we have bytes left over, but less bytes than a whole step.
-    if (stepCount * 8 * stepSize < bitsCount / 8) {
-      var temp: RankCache = RankCache(0, Vector[Int]())
-      if (result.length == 0) {
-        temp.countAtStepEdge = 0
-      } else {
-        temp.countAtStepEdge =
-          result.last.countAtStepEdge + getLastCountAtByte(
-            result.last.countAtByte
-          )
-      }
+    return result
+  }
+  def getRunningCount(cache: Vector[RankCache]): Int = {
+    if (cache.length == 0) {
+      return 0
+    }
+    return cache.last.countAtStepEdge + getLastCountAtByte(
+      cache.last.countAtByte
+    )
+  }
+  def countTrailingBytes(
+      bits: BitVector,
+      stepCount: Int,
+      stepSize: Int,
+      currentTotal: Int
+  ): Vector[RankCache] = {
+    var result: Vector[RankCache] = Vector()
+    if (stepCount * 8 * stepSize < bits.length / 8) {
+      var temp: RankCache = RankCache(currentTotal, Vector[Int]())
       var byteCount = 0;
-      for (index <- (stepCount * stepSize) until (bitsCount / 8).toInt) {
+      for (index <- (stepCount * stepSize) until (bits.length / 8).toInt) {
         val byte = bits.getByte(index.toLong)
         byteCount += countOnesInByte(byte)
         temp.countAtByte :+= byteCount
       }
+      val lastCountedIndex = (bits.length / 8) * 8
+
+      if (lastCountedIndex % stepSize != 0) {}
       result :+= temp
     }
+    return result
+  }
+
+  def populateCache(bits: BitVector, stepSize: Int): Vector[RankCache] = {
+    if (bits.length == 0) {
+      return Vector[RankCache]()
+    }
+    printf("BitVector: %s\n", bits.toHex)
+    val stepCount = (bits.length / (8 * stepSize)).toInt
+    var runningBitCount: Int = 0
+    printf(
+      "bit length: %d, calculated step count: %d\n",
+      bits.length,
+      stepCount
+    )
+
+    var result: Vector[RankCache] = countBlocks(bits, stepCount, stepSize)
+    // Check if we have bytes left over, but less bytes than a whole step.
+    result ++= countTrailingBytes(
+      bits,
+      stepCount,
+      stepSize,
+      getRunningCount(result)
+    )
 
     // We've counted everything that's in byte sized chunks, now to see if there are any bits left over that aren't byte-aligned.
-    val lastCountedIndex = (bitsCount / 8) * 8
-    if (lastCountedIndex < bitsCount) {
+    val lastCountedIndex = (bits.length / 8) * 8
+    if (lastCountedIndex < bits.length) {
       printf(
-        "    Final if tripped. Step count: %d, stepSize: %d, bitsCount: %d\n",
+        "    Final if tripped. Step count: %d, stepSize: %d, bitsCount: %d, result length: %d\n",
         stepCount,
         stepSize,
-        bitsCount
+        bits.length,
+        result.length
       )
 
-      val byteCount = loopHelper(bits, stepCount, stepSize)
-      if (result.length == 0) {
-        printf("    Empty Result Vector.\n")
-        val temp = RankCache(0, Vector(byteCount))
-        result :+= temp
+      var byteCount = 0
+      for (index <- lastCountedIndex until bits.length) {
+        if (bits.get(index)) {
+          byteCount += 1
+        }
+      }
+      if (result.length == 0 || result.last.countAtByte.length >= stepSize) {
+        printf("derp 1\n")
+        result :+= RankCache(0, Vector(byteCount))
       } else {
         printf("    Populated Result Vector\n")
         val stepTotal =
           getLastCountAtByte(result.last.countAtByte) + byteCount
+        printf("    stepTotal: %d, byteCount: %d\n", stepTotal, byteCount)
         result.last.countAtByte :+= stepTotal
       }
     }
+
     printf("Done.\n\n")
     return result
   }
