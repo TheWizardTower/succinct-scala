@@ -57,9 +57,8 @@ object Rank {
     if (bits.length == 0) {
       return Vector[RankCache]()
     }
-    printf("bitvector: %s\n", bits.toHex)
+    printf("BitVector: %s\n", bits.toHex)
     val bitsCount = bits.length
-    // val stepCount = java.lang.Math.max(1, (bitsCount / (8 * stepSize)).toInt)
     val stepCount = (bitsCount / (8 * stepSize)).toInt
     var result: Vector[RankCache] = Vector()
     var runningBitCount: Int = 0
@@ -108,7 +107,7 @@ object Rank {
       }
       var byteCount = 0;
       for (index <- (stepCount * stepSize) until (bitsCount / 8).toInt) {
-        val byte = bits.getByte(index)
+        val byte = bits.getByte(index.toLong)
         byteCount += countOnesInByte(byte)
         temp.countAtByte :+= byteCount
       }
